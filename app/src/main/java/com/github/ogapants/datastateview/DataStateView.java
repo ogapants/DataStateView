@@ -1,6 +1,7 @@
 package com.github.ogapants.datastateview;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,7 @@ public class DataStateView extends FrameLayout {
             return;
         }
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        binding = ViewDataSateBinding.inflate(layoutInflater);
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.view_data_sate, this, true);
         changeState(DataState.SILENT);
     }
 
