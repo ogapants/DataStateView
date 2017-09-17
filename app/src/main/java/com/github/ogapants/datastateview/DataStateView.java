@@ -13,6 +13,7 @@ public class DataStateView extends FrameLayout {
 
     private ViewDataSateBinding binding;
     private DataState currentDataState;
+    private View contentData;
 
     public DataStateView(Context context) {
         this(context, null);
@@ -37,21 +38,25 @@ public class DataStateView extends FrameLayout {
         currentDataState = dataState;
         switch (dataState) {
             case LOADING:
-                setViewVisibility(binding.progress);
+                appear(binding.progress);
+                setContentVisibility(View.GONE);
                 break;
             case EMPTY:
-                setViewVisibility(binding.emptyText);
+                appear(binding.emptyText);
+                setContentVisibility(View.GONE);
                 break;
             case ERROR:
-                setViewVisibility(binding.retryButton);
+                appear(binding.retryButton);
+                setContentVisibility(View.GONE);
                 break;
             case SILENT:
                 binding.getRoot().setVisibility(View.GONE);
+                setContentVisibility(View.VISIBLE);
                 break;
         }
     }
 
-    private void setViewVisibility(View visibleView) {
+    private void appear(View visibleView) {
         binding.getRoot().setVisibility(View.VISIBLE);
         binding.retryButton.setVisibility(View.GONE);
         binding.emptyText.setVisibility(View.GONE);
@@ -68,6 +73,16 @@ public class DataStateView extends FrameLayout {
                 onRetryClickListener.onRetryClick();
             }
         });
+    }
+
+    private void setContentVisibility(int visibility) {
+        if (contentData != null) {
+            contentData.setVisibility(visibility);
+        }
+    }
+
+    public void setContentData(View contentData) {
+        this.contentData = contentData;
     }
 
     public interface OnRetryClickListener {

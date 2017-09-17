@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 loadError();
             }
         });
+
+        binding.dataStateView.setContentData(binding.data);
         binding.dataStateView.setOnRetryClickListener(new DataStateView.OnRetryClickListener() {
             @Override
             public void onRetryClick() {
@@ -45,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadOk() {
         binding.dataStateView.changeState(DataState.LOADING);
-        binding.data.setVisibility(View.GONE);
         load(new Runnable() {
             @Override
             public void run() {
                 binding.dataStateView.changeState(DataState.SILENT);
-                binding.data.setVisibility(View.VISIBLE);
                 binding.data.setText("load success");
             }
         });
@@ -58,24 +58,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadEmpty() {
         binding.dataStateView.changeState(DataState.LOADING);
-        binding.data.setVisibility(View.GONE);
         load(new Runnable() {
             @Override
             public void run() {
                 binding.dataStateView.changeState(DataState.EMPTY);
-                binding.data.setVisibility(View.GONE);
             }
         });
     }
 
     private void loadError() {
         binding.dataStateView.changeState(DataState.LOADING);
-        binding.data.setVisibility(View.GONE);
         load(new Runnable() {
             @Override
             public void run() {
                 binding.dataStateView.changeState(DataState.ERROR);
-                binding.data.setVisibility(View.GONE);
                 Toast.makeText(MainActivity.this, "error!", Toast.LENGTH_SHORT).show();
             }
         });
