@@ -24,14 +24,13 @@ public class DataStateView extends FrameLayout {
 
     public DataStateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        inflate(getContext(), R.layout.view_data_sate, this);
         if (isInEditMode()) {
-            inflate(getContext(), R.layout.view_data_sate, this);
             return;
         }
-        View inflate = inflate(getContext(), R.layout.view_data_sate, this);
-        progress = inflate.findViewById(R.id.progress);
-        emptyTextView = inflate.findViewById(R.id.emptyTextView);
-        retryButton = inflate.findViewById(R.id.retryButton);
+        progress = findViewById(R.id.progress);
+        emptyTextView = findViewById(R.id.emptyTextView);
+        retryButton = findViewById(R.id.retryButton);
 
         changeState(DataState.SILENT);
     }
