@@ -1,18 +1,17 @@
 package com.github.ogapants.datastateview;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.github.ogapants.datastateview.databinding.ViewDataSateBinding;
+import android.widget.TextView;
 
 public class DataStateView extends FrameLayout {
 
-    private ViewDataSateBinding binding;
     private DataState currentDataState;
+    private View progress;
+    private View emptyTextView;
+    private View retryButton;
     private View contentData;
 
     public DataStateView(Context context) {
@@ -29,44 +28,71 @@ public class DataStateView extends FrameLayout {
             inflate(getContext(), R.layout.view_data_sate, this);
             return;
         }
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.view_data_sate, this, true);
+        View inflate = inflate(getContext(), R.layout.view_data_sate, this);
+        progress = inflate.findViewById(R.id.progress);
+        emptyTextView = inflate.findViewById(R.id.emptyTextView);
+        retryButton = inflate.findViewById(R.id.retryButton);
+
         changeState(DataState.SILENT);
+    }
+
+    public void setProgressView(View progress) {
+        this.progress = progress;
+    }
+
+    public void setEmptyTextView(View emptyTextView) {
+        this.emptyTextView = emptyTextView;
+    }
+
+    public void setEmptyText(String emptyText) {
+        if (emptyTextView instanceof TextView) {
+            ((TextView) emptyTextView).setText(emptyText);
+        }
+    }
+
+    public void setRetryButton(View retryButton) {
+        this.retryButton = retryButton;
+    }
+
+    public void setRetryText(String retryText) {
+        if (retryButton instanceof TextView) {
+            ((TextView) retryButton).setText(retryText);
+        }
     }
 
     public void changeState(DataState dataState) {
         currentDataState = dataState;
         switch (dataState) {
             case LOADING:
-                appear(binding.progress);
+                appear(progress);
                 setContentVisibility(View.GONE);
                 break;
             case EMPTY:
-                appear(binding.emptyText);
+                appear(emptyTextView);
                 setContentVisibility(View.GONE);
                 break;
             case ERROR:
-                appear(binding.retryButton);
+                appear(retryButton);
                 setContentVisibility(View.GONE);
                 break;
             case SILENT:
-                binding.getRoot().setVisibility(View.GONE);
+                setVisibility(View.GONE);
                 setContentVisibility(View.VISIBLE);
                 break;
         }
     }
 
     private void appear(View visibleView) {
-        binding.getRoot().setVisibility(View.VISIBLE);
-        binding.retryButton.setVisibility(View.GONE);
-        binding.emptyText.setVisibility(View.GONE);
-        binding.progress.setVisibility(View.GONE);
+        setVisibility(View.VISIBLE);
+        retryButton.setVisibility(View.GONE);
+        emptyTextView.setVisibility(View.GONE);
+        progress.setVisibility(View.GONE);
 
         visibleView.setVisibility(View.VISIBLE);
     }
 
     public void setOnRetryClickListener(final OnRetryClickListener onRetryClickListener) {
-        binding.retryButton.setOnClickListener(new View.OnClickListener() {
+        retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeState(DataState.LOADING);
