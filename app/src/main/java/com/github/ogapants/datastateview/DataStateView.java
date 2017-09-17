@@ -3,7 +3,9 @@ package com.github.ogapants.datastateview;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DataStateView extends FrameLayout {
@@ -24,39 +26,19 @@ public class DataStateView extends FrameLayout {
 
     public DataStateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        inflate(getContext(), R.layout.view_data_sate, this);
+        progress = new ProgressBar(getContext());
+        addView(progress);
+        emptyTextView = new TextView(getContext());
+        setEmptyText("data is empty");
+        addView(emptyTextView);
+        retryButton = new Button(getContext());
+        setRetryText("retry");
+        addView(retryButton);
+
         if (isInEditMode()) {
             return;
         }
-        progress = findViewById(R.id.progress);
-        emptyTextView = findViewById(R.id.emptyTextView);
-        retryButton = findViewById(R.id.retryButton);
-
         changeState(DataState.SILENT);
-    }
-
-    public void setProgressView(View progress) {
-        this.progress = progress;
-    }
-
-    public void setEmptyTextView(View emptyTextView) {
-        this.emptyTextView = emptyTextView;
-    }
-
-    public void setEmptyText(String emptyText) {
-        if (emptyTextView instanceof TextView) {
-            ((TextView) emptyTextView).setText(emptyText);
-        }
-    }
-
-    public void setRetryButton(View retryButton) {
-        this.retryButton = retryButton;
-    }
-
-    public void setRetryText(String retryText) {
-        if (retryButton instanceof TextView) {
-            ((TextView) retryButton).setText(retryText);
-        }
     }
 
     public void changeState(DataState dataState) {
@@ -88,6 +70,30 @@ public class DataStateView extends FrameLayout {
         progress.setVisibility(View.GONE);
 
         visibleView.setVisibility(View.VISIBLE);
+    }
+
+    public void setProgressView(View progress) {
+        this.progress = progress;
+    }
+
+    public void setEmptyTextView(View emptyTextView) {
+        this.emptyTextView = emptyTextView;
+    }
+
+    public void setEmptyText(String emptyText) {
+        if (emptyTextView instanceof TextView) {
+            ((TextView) emptyTextView).setText(emptyText);
+        }
+    }
+
+    public void setRetryButton(View retryButton) {
+        this.retryButton = retryButton;
+    }
+
+    public void setRetryText(String retryText) {
+        if (retryButton instanceof TextView) {
+            ((TextView) retryButton).setText(retryText);
+        }
     }
 
     public void setOnRetryClickListener(final OnRetryClickListener onRetryClickListener) {
