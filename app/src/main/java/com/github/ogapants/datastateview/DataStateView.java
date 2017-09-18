@@ -73,10 +73,14 @@ public class DataStateView extends FrameLayout {
     }
 
     public void setProgressView(View progress) {
+        removeView(this.progress);
+        addView(progress);
         this.progress = progress;
     }
 
     public void setEmptyTextView(View emptyTextView) {
+        removeView(this.emptyTextView);
+        addView(emptyTextView);
         this.emptyTextView = emptyTextView;
     }
 
@@ -87,6 +91,8 @@ public class DataStateView extends FrameLayout {
     }
 
     public void setRetryButton(View retryButton) {
+        removeView(this.retryButton);
+        addView(retryButton);
         this.retryButton = retryButton;
     }
 
