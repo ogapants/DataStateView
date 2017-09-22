@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DataStateView extends FrameLayout {
@@ -26,19 +25,21 @@ public class DataStateView extends FrameLayout {
 
     public DataStateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        progress = new ProgressBar(getContext());
-        addView(progress);
-        emptyTextView = new TextView(getContext());
-        setEmptyText("data is empty");
-        addView(emptyTextView);
-        retryButton = new Button(getContext());
-        setRetryText("retry");
-        addView(retryButton);
-
+        initViews();
         if (isInEditMode()) {
             return;
         }
         changeState(DataState.SILENT);
+    }
+
+    protected void initViews() {
+        setProgressView(progress);
+        TextView emptyTextView = new TextView(getContext());
+        emptyTextView.setText("data is empty");
+        setEmptyTextView(emptyTextView);
+        Button retryButton = new Button(getContext());
+        retryButton.setText("retry");
+        setRetryButton(retryButton);
     }
 
     public void changeState(DataState dataState) {
