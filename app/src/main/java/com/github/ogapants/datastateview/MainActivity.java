@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         binding.dataStateView.setContentData(binding.data);
-        binding.dataStateView.setOnRetryClickListener(new DataStateView.OnRetryClickListener() {
+        binding.dataStateView.setOnReloadClickListener(new DataStateView.OnReloadClickListener() {
             @Override
-            public void onRetryClick() {
+            public void onReloadClick() {
                 loadOk();
             }
         });
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         binding.dataStateView.setEmptyTextView(button);
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(android.R.drawable.ic_delete);
-        binding.dataStateView.setRetryButton(imageView);
+        binding.dataStateView.setReloadButton(imageView);
         TextView textView = new TextView(this);
         textView.setText("loading...");
         binding.dataStateView.setProgressView(textView);

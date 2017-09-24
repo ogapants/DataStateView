@@ -12,7 +12,7 @@ public class DataStateView extends FrameLayout {
     private DataState currentDataState;
     private View progress;
     private View emptyTextView;
-    private View retryButton;
+    private View reloadButton;
     private View contentData;
 
     public DataStateView(Context context) {
@@ -37,9 +37,9 @@ public class DataStateView extends FrameLayout {
         TextView emptyTextView = new TextView(getContext());
         emptyTextView.setText("data is empty");
         setEmptyTextView(emptyTextView);
-        Button retryButton = new Button(getContext());
-        retryButton.setText("retry");
-        setRetryButton(retryButton);
+        Button reloadButton = new Button(getContext());
+        reloadButton.setText("reload");
+        setReloadButton(reloadButton);
     }
 
     public void changeState(DataState dataState) {
@@ -54,7 +54,7 @@ public class DataStateView extends FrameLayout {
                 setContentVisibility(View.GONE);
                 break;
             case ERROR:
-                appear(retryButton);
+                appear(reloadButton);
                 setContentVisibility(View.GONE);
                 break;
             case SILENT:
@@ -66,7 +66,7 @@ public class DataStateView extends FrameLayout {
 
     private void appear(View visibleView) {
         setVisibility(View.VISIBLE);
-        retryButton.setVisibility(View.GONE);
+        reloadButton.setVisibility(View.GONE);
         emptyTextView.setVisibility(View.GONE);
         progress.setVisibility(View.GONE);
 
@@ -91,24 +91,24 @@ public class DataStateView extends FrameLayout {
         }
     }
 
-    public void setRetryButton(View retryButton) {
-        removeView(this.retryButton);
-        addView(retryButton);
-        this.retryButton = retryButton;
+    public void setReloadButton(View reloadButton) {
+        removeView(this.reloadButton);
+        addView(reloadButton);
+        this.reloadButton = reloadButton;
     }
 
-    public void setRetryText(String retryText) {
-        if (retryButton instanceof TextView) {
-            ((TextView) retryButton).setText(retryText);
+    public void setReloadText(String reloadText) {
+        if (reloadButton instanceof TextView) {
+            ((TextView) reloadButton).setText(reloadText);
         }
     }
 
-    public void setOnRetryClickListener(final OnRetryClickListener onRetryClickListener) {
-        retryButton.setOnClickListener(new View.OnClickListener() {
+    public void setOnReloadClickListener(final OnReloadClickListener onReloadClickListener) {
+        reloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeState(DataState.LOADING);
-                onRetryClickListener.onRetryClick();
+                onReloadClickListener.onReloadClick();
             }
         });
     }
@@ -123,7 +123,11 @@ public class DataStateView extends FrameLayout {
         this.contentData = contentData;
     }
 
-    public interface OnRetryClickListener {
-        void onRetryClick();
+    public DataState getCurrentDataState() {
+        return currentDataState;
+    }
+
+    public interface OnReloadClickListener {
+        void onReloadClick();
     }
 }
