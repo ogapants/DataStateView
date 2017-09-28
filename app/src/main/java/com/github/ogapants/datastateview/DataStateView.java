@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class DataStateView extends FrameLayout {
@@ -33,7 +34,7 @@ public class DataStateView extends FrameLayout {
     }
 
     protected void initViews() {
-        setProgressView(progress);
+        setProgressView(new ProgressBar(getContext()));
         TextView emptyTextView = new TextView(getContext());
         emptyTextView.setText("data is empty");
         setEmptyTextView(emptyTextView);
