@@ -1,7 +1,9 @@
 package com.github.ogapants.datastateview;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -14,7 +16,7 @@ public class DataStateView extends FrameLayout {
     private View progress;
     private View emptyTextView;
     private View reloadButton;
-    private View contentData;
+    private View dataView;
 
     public DataStateView(Context context) {
         this(context, null);
@@ -30,7 +32,7 @@ public class DataStateView extends FrameLayout {
         if (isInEditMode()) {
             return;
         }
-        changeState(DataState.SILENT);
+        updateState(DataState.SILENT);
     }
 
     protected void initViews() {
@@ -43,29 +45,28 @@ public class DataStateView extends FrameLayout {
         setReloadButton(reloadButton);
     }
 
-    public void changeState(DataState dataState) {
+    public void updateState(DataState dataState) {
         currentDataState = dataState;
         switch (dataState) {
             case LOADING:
                 appear(progress);
-                setContentVisibility(View.GONE);
                 break;
             case EMPTY:
                 appear(emptyTextView);
-                setContentVisibility(View.GONE);
                 break;
             case ERROR:
                 appear(reloadButton);
-                setContentVisibility(View.GONE);
                 break;
             case SILENT:
                 setVisibility(View.GONE);
-                setContentVisibility(View.VISIBLE);
+                setDataVisibility(View.VISIBLE);
                 break;
         }
     }
 
     private void appear(View visibleView) {
+        setDataVisibility(View.GONE);
+
         setVisibility(View.VISIBLE);
         reloadButton.setVisibility(View.GONE);
         emptyTextView.setVisibility(View.GONE);
@@ -80,10 +81,18 @@ public class DataStateView extends FrameLayout {
         this.progress = progress;
     }
 
+    public void setProgressView(@LayoutRes int resId) {
+        setProgressView(LayoutInflater.from(getContext()).inflate(resId, null));
+    }
+
     public void setEmptyTextView(View emptyTextView) {
         removeView(this.emptyTextView);
         addView(emptyTextView);
         this.emptyTextView = emptyTextView;
+    }
+
+    public void setEmptyTextView(@LayoutRes int resId) {
+        setEmptyTextView(LayoutInflater.from(getContext()).inflate(resId, null));
     }
 
     public void setEmptyText(String emptyText) {
@@ -98,6 +107,10 @@ public class DataStateView extends FrameLayout {
         this.reloadButton = reloadButton;
     }
 
+    public void setReloadButton(@LayoutRes int resId) {
+        setReloadButton(LayoutInflater.from(getContext()).inflate(resId, null));
+    }
+
     public void setReloadText(String reloadText) {
         if (reloadButton instanceof TextView) {
             ((TextView) reloadButton).setText(reloadText);
@@ -108,20 +121,20 @@ public class DataStateView extends FrameLayout {
         reloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeState(DataState.LOADING);
+                updateState(DataState.LOADING);
                 onReloadClickListener.onReloadClick();
             }
         });
     }
 
-    private void setContentVisibility(int visibility) {
-        if (contentData != null) {
-            contentData.setVisibility(visibility);
+    private void setDataVisibility(int visibility) {
+        if (dataView != null) {
+            dataView.setVisibility(visibility);
         }
     }
 
-    public void setContentData(View contentData) {
-        this.contentData = contentData;
+    public void with(View contentData) {
+        this.dataView = contentData;
     }
 
     public DataState getCurrentDataState() {

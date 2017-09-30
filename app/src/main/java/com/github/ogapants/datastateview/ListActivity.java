@@ -22,7 +22,6 @@ public class ListActivity extends AppCompatActivity {
     private static final String TAG = ListActivity.class.getSimpleName();
     private static final String KEY_TYPE = "TYPE";
     private static final String KEY_CUSTOM = "CUSTOM";
-    private final List<String> items = Arrays.asList("a", "b", "c", "d");
     private ListView listView;
     private DataStateView dataStateView;
 
@@ -39,7 +38,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         listView = findViewById(R.id.list_view);
         dataStateView = findViewById(R.id.dataStateView);
-        dataStateView.setContentData(listView);
+        dataStateView.with(listView);
         dataStateView.setOnReloadClickListener(new DataStateView.OnReloadClickListener() {
             @Override
             public void onReloadClick() {
@@ -47,8 +46,7 @@ public class ListActivity extends AppCompatActivity {
             }
         });
         DataState dataState = (DataState) getIntent().getSerializableExtra(KEY_TYPE);
-        boolean customized = getIntent().getBooleanExtra(KEY_CUSTOM, false);
-        if (customized) {
+        if (getIntent().getBooleanExtra(KEY_CUSTOM, false)) {
             setCustomView();
         }
 
@@ -69,15 +67,15 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void load(DataState dataState) {
-        dataStateView.changeState(DataState.LOADING);
+        dataStateView.updateState(DataState.LOADING);
         loadDummy(dataState, new Callback() {
             @Override
             public void onSuccess(List<String> result) {
                 if (result.isEmpty()) {
-                    dataStateView.changeState(DataState.EMPTY);
+                    dataStateView.updateState(DataState.EMPTY);
                     return;
                 }
-                dataStateView.changeState(DataState.SILENT);
+                dataStateView.updateState(DataState.SILENT);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ListActivity.this, android.R.layout.simple_list_item_1, result);
                 listView.setAdapter(adapter);
             }
@@ -85,7 +83,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 Log.e(TAG, "onError: ");
-                dataStateView.changeState(DataState.ERROR);
+                dataStateView.updateState(DataState.ERROR);
                 Toast.makeText(ListActivity.this, "error!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -103,7 +101,7 @@ public class ListActivity extends AppCompatActivity {
                         callback.onError();
                         break;
                     case SILENT:
-                        callback.onSuccess(items);
+                        callback.onSuccess(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i"));
                         break;
                     case LOADING:
                     default:
