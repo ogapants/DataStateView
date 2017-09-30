@@ -10,29 +10,29 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class DataStateView extends FrameLayout {
+public class LoadStateView extends FrameLayout {
 
-    private DataState currentDataState;
+    private LoadState currentLoadState;
     private View progress;
     private View emptyTextView;
     private View reloadButton;
     private View dataView;
 
-    public DataStateView(Context context) {
+    public LoadStateView(Context context) {
         this(context, null);
     }
 
-    public DataStateView(Context context, AttributeSet attrs) {
+    public LoadStateView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DataStateView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LoadStateView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initViews();
         if (isInEditMode()) {
             return;
         }
-        updateState(DataState.SILENT);
+        updateState(LoadState.DISABLE);
     }
 
     protected void initViews() {
@@ -45,19 +45,19 @@ public class DataStateView extends FrameLayout {
         setReloadButton(reloadButton);
     }
 
-    public void updateState(DataState dataState) {
-        currentDataState = dataState;
-        switch (dataState) {
+    public void updateState(LoadState loadState) {
+        currentLoadState = loadState;
+        switch (loadState) {
             case LOADING:
                 appear(progress);
                 break;
-            case EMPTY:
+            case LOADED_EMPTY:
                 appear(emptyTextView);
                 break;
             case ERROR:
                 appear(reloadButton);
                 break;
-            case SILENT:
+            case DISABLE:
                 setVisibility(View.GONE);
                 setDataVisibility(View.VISIBLE);
                 break;
@@ -121,7 +121,7 @@ public class DataStateView extends FrameLayout {
         reloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateState(DataState.LOADING);
+                updateState(LoadState.LOADING);
                 onReloadClickListener.onReloadClick();
             }
         });
@@ -137,8 +137,8 @@ public class DataStateView extends FrameLayout {
         this.dataView = contentData;
     }
 
-    public DataState getCurrentDataState() {
-        return currentDataState;
+    public LoadState getCurrentLoadState() {
+        return currentLoadState;
     }
 
     public interface OnReloadClickListener {

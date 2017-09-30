@@ -23,11 +23,11 @@ public class ListActivity extends AppCompatActivity {
     private static final String KEY_TYPE = "TYPE";
     private static final String KEY_CUSTOM = "CUSTOM";
     private ListView listView;
-    private DataStateView dataStateView;
+    private LoadStateView loadStateView;
 
-    public static Intent createIntetnt(Context context, DataState dataState, boolean custom) {
+    public static Intent createIntent(Context context, LoadState loadState, boolean custom) {
         Intent intent = new Intent(context, ListActivity.class);
-        intent.putExtra(KEY_TYPE, dataState);
+        intent.putExtra(KEY_TYPE, loadState);
         intent.putExtra(KEY_CUSTOM, custom);
         return intent;
     }
@@ -37,45 +37,45 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         listView = findViewById(R.id.list_view);
-        dataStateView = findViewById(R.id.dataStateView);
-        dataStateView.with(listView);
-        dataStateView.setOnReloadClickListener(new DataStateView.OnReloadClickListener() {
+        loadStateView = findViewById(R.id.dataStateView);
+        loadStateView.with(listView);
+        loadStateView.setOnReloadClickListener(new LoadStateView.OnReloadClickListener() {
             @Override
             public void onReloadClick() {
-                load(DataState.SILENT);
+                load(LoadState.DISABLE);
             }
         });
-        DataState dataState = (DataState) getIntent().getSerializableExtra(KEY_TYPE);
+        LoadState loadState = (LoadState) getIntent().getSerializableExtra(KEY_TYPE);
         if (getIntent().getBooleanExtra(KEY_CUSTOM, false)) {
             setCustomView();
         }
 
-        load(dataState);
+        load(loadState);
     }
 
     private void setCustomView() {
         // TODO: 2017/09/18 hmm....
         Button button = new Button(this);
         button.setText("Now empty!");
-        dataStateView.setEmptyTextView(button);
+        loadStateView.setEmptyTextView(button);
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(android.R.drawable.ic_delete);
-        dataStateView.setReloadButton(imageView);
+        loadStateView.setReloadButton(imageView);
         TextView textView = new TextView(this);
         textView.setText("loading...");
-        dataStateView.setProgressView(textView);
+        loadStateView.setProgressView(textView);
     }
 
-    private void load(DataState dataState) {
-        dataStateView.updateState(DataState.LOADING);
-        loadDummy(dataState, new Callback() {
+    private void load(LoadState loadState) {
+        loadStateView.updateState(LoadState.LOADING);
+        loadDummy(loadState, new Callback() {
             @Override
             public void onSuccess(List<String> result) {
                 if (result.isEmpty()) {
-                    dataStateView.updateState(DataState.EMPTY);
+                    loadStateView.updateState(LoadState.LOADED_EMPTY);
                     return;
                 }
-                dataStateView.updateState(DataState.SILENT);
+                loadStateView.updateState(LoadState.DISABLE);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(ListActivity.this, android.R.layout.simple_list_item_1, result);
                 listView.setAdapter(adapter);
             }
@@ -83,24 +83,24 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onError() {
                 Log.e(TAG, "onError: ");
-                dataStateView.updateState(DataState.ERROR);
+                loadStateView.updateState(LoadState.ERROR);
                 Toast.makeText(ListActivity.this, "error!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void loadDummy(final DataState silent, final Callback callback) {
+    private void loadDummy(final LoadState loadState, final Callback callback) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                switch (silent) {
-                    case EMPTY:
+                switch (loadState) {
+                    case LOADED_EMPTY:
                         callback.onSuccess(Collections.<String>emptyList());
                         break;
                     case ERROR:
                         callback.onError();
                         break;
-                    case SILENT:
+                    case DISABLE:
                         callback.onSuccess(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i"));
                         break;
                     case LOADING:

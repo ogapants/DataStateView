@@ -20,19 +20,19 @@ public class MainActivity extends AppCompatActivity {
         binding.ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                go(DataState.SILENT);
+                go(LoadState.DISABLE);
             }
         });
         binding.empty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                go(DataState.EMPTY);
+                go(LoadState.LOADED_EMPTY);
             }
         });
         binding.error.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                go(DataState.ERROR);
+                go(LoadState.ERROR);
             }
         });
         binding.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void go(DataState dataState) {
-        startActivity(ListActivity.createIntetnt(this, dataState, custom));
+    private void go(LoadState loadState) {
+        startActivity(ListActivity.createIntent(this, loadState, custom));
     }
 }
