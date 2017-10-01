@@ -3,7 +3,6 @@ package com.github.ogapants.datastateview;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -13,8 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
@@ -49,7 +46,6 @@ public class ListActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra(KEY_CUSTOM, false)) {
             setCustomView();
         }
-
         load(loadState);
     }
 
@@ -57,18 +53,18 @@ public class ListActivity extends AppCompatActivity {
         // TODO: 2017/09/18 hmm....
         Button button = new Button(this);
         button.setText("Now empty!");
-        loadStateView.setEmptyTextView(button);
+        loadStateView.setEmptyView(button);
         ImageView imageView = new ImageView(this);
         imageView.setImageResource(android.R.drawable.ic_delete);
-        loadStateView.setReloadButton(imageView);
+        loadStateView.setReloadView(imageView);
         TextView textView = new TextView(this);
         textView.setText("loading...");
         loadStateView.setProgressView(textView);
     }
 
-    private void load(LoadState loadState) {
+    private void load(LoadState expectStatus) {
         loadStateView.updateState(LoadState.LOADING);
-        loadDummy(loadState, new Callback() {
+        new SampleApi().load(expectStatus, new SampleApi.Callback() {
             @Override
             public void onSuccess(List<String> result) {
                 if (result.isEmpty()) {
@@ -87,33 +83,5 @@ public class ListActivity extends AppCompatActivity {
                 Toast.makeText(ListActivity.this, "error!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void loadDummy(final LoadState loadState, final Callback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switch (loadState) {
-                    case LOADED_EMPTY:
-                        callback.onSuccess(Collections.<String>emptyList());
-                        break;
-                    case ERROR:
-                        callback.onError();
-                        break;
-                    case DISABLE:
-                        callback.onSuccess(Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i"));
-                        break;
-                    case LOADING:
-                    default:
-                        //nop
-                }
-            }
-        }, 1000);
-    }
-
-    private interface Callback {
-        void onSuccess(List<String> result);
-
-        void onError();
     }
 }

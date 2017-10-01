@@ -14,8 +14,8 @@ public class LoadStateView extends FrameLayout {
 
     private LoadState currentLoadState;
     private View progress;
-    private View emptyTextView;
-    private View reloadButton;
+    private View emptyView;
+    private View reloadView;
     private View dataView;
 
     public LoadStateView(Context context) {
@@ -36,13 +36,18 @@ public class LoadStateView extends FrameLayout {
     }
 
     protected void initViews() {
-        setProgressView(new ProgressBar(getContext()));
+        ProgressBar progress = new ProgressBar(getContext());
         TextView emptyTextView = new TextView(getContext());
         emptyTextView.setText("data is empty");
-        setEmptyTextView(emptyTextView);
         Button reloadButton = new Button(getContext());
         reloadButton.setText("reload");
-        setReloadButton(reloadButton);
+        initViews(progress, emptyTextView, reloadButton);
+    }
+
+    protected void initViews(View progressView, View emptyView, View reloadView) {
+        setProgressView(progressView);
+        setEmptyView(emptyView);
+        setReloadView(reloadView);
     }
 
     public void updateState(LoadState loadState) {
@@ -52,10 +57,10 @@ public class LoadStateView extends FrameLayout {
                 appear(progress);
                 break;
             case LOADED_EMPTY:
-                appear(emptyTextView);
+                appear(emptyView);
                 break;
             case ERROR:
-                appear(reloadButton);
+                appear(reloadView);
                 break;
             case DISABLE:
                 setVisibility(View.GONE);
@@ -68,8 +73,8 @@ public class LoadStateView extends FrameLayout {
         setDataVisibility(View.GONE);
 
         setVisibility(View.VISIBLE);
-        reloadButton.setVisibility(View.GONE);
-        emptyTextView.setVisibility(View.GONE);
+        reloadView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
         progress.setVisibility(View.GONE);
 
         visibleView.setVisibility(View.VISIBLE);
@@ -85,40 +90,40 @@ public class LoadStateView extends FrameLayout {
         setProgressView(LayoutInflater.from(getContext()).inflate(resId, null));
     }
 
-    public void setEmptyTextView(View emptyTextView) {
-        removeView(this.emptyTextView);
+    public void setEmptyView(View emptyTextView) {
+        removeView(this.emptyView);
         addView(emptyTextView);
-        this.emptyTextView = emptyTextView;
+        this.emptyView = emptyTextView;
     }
 
-    public void setEmptyTextView(@LayoutRes int resId) {
-        setEmptyTextView(LayoutInflater.from(getContext()).inflate(resId, null));
+    public void setEmptyView(@LayoutRes int resId) {
+        setEmptyView(LayoutInflater.from(getContext()).inflate(resId, null));
     }
 
     public void setEmptyText(String emptyText) {
-        if (emptyTextView instanceof TextView) {
-            ((TextView) emptyTextView).setText(emptyText);
+        if (emptyView instanceof TextView) {
+            ((TextView) emptyView).setText(emptyText);
         }
     }
 
-    public void setReloadButton(View reloadButton) {
-        removeView(this.reloadButton);
+    public void setReloadView(View reloadButton) {
+        removeView(this.reloadView);
         addView(reloadButton);
-        this.reloadButton = reloadButton;
+        this.reloadView = reloadButton;
     }
 
-    public void setReloadButton(@LayoutRes int resId) {
-        setReloadButton(LayoutInflater.from(getContext()).inflate(resId, null));
+    public void setReloadView(@LayoutRes int resId) {
+        setReloadView(LayoutInflater.from(getContext()).inflate(resId, null));
     }
 
     public void setReloadText(String reloadText) {
-        if (reloadButton instanceof TextView) {
-            ((TextView) reloadButton).setText(reloadText);
+        if (reloadView instanceof TextView) {
+            ((TextView) reloadView).setText(reloadText);
         }
     }
 
     public void setOnReloadClickListener(final OnReloadClickListener onReloadClickListener) {
-        reloadButton.setOnClickListener(new View.OnClickListener() {
+        reloadView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateState(LoadState.LOADING);
@@ -133,8 +138,8 @@ public class LoadStateView extends FrameLayout {
         }
     }
 
-    public void with(View contentData) {
-        this.dataView = contentData;
+    public void with(View dataView) {
+        this.dataView = dataView;
     }
 
     public LoadState getCurrentLoadState() {
