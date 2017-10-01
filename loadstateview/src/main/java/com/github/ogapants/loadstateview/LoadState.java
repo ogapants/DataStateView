@@ -1,4 +1,4 @@
-package com.github.ogapants.datastateview;
+package com.github.ogapants.loadstateview;
 
 public enum LoadState {
     LOADING, //data is being loaded...

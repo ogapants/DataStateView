@@ -1,4 +1,4 @@
-package com.github.ogapants.datastateview;
+package com.github.ogapants.loadstateview;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -123,7 +123,7 @@ public class LoadStateView extends FrameLayout {
     }
 
     public void setOnReloadClickListener(final OnReloadClickListener onReloadClickListener) {
-        reloadView.setOnClickListener(new View.OnClickListener() {
+        reloadView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateState(LoadState.LOADING);

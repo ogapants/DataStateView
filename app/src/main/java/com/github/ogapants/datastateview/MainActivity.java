@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.github.ogapants.datastateview.databinding.ActivityMainBinding;
+import com.github.ogapants.loadstateview.LoadState;
 
 public class MainActivity extends AppCompatActivity {
 

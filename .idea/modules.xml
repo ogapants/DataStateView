@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DataStateView.iml" filepath="$PROJECT_DIR$/DataStateView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loadstateview/loadstateview.iml" filepath="$PROJECT_DIR$/loadstateview/loadstateview.iml" />
     </modules>
   </component>
 </project>

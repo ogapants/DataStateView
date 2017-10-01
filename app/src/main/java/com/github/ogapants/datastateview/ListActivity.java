@@ -12,6 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ogapants.loadstateview.LoadState;
+import com.github.ogapants.loadstateview.LoadStateView;
+
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {

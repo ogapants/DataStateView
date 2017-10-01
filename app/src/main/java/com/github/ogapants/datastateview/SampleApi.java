@@ -2,6 +2,8 @@ package com.github.ogapants.datastateview;
 
 import android.os.Handler;
 
+import com.github.ogapants.loadstateview.LoadState;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
