@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:orientation="vertical"
-        tools:context="com.github.ogapants.datastateview.MainActivity">
+        tools:context="com.github.ogapants.loadstateview.sample.MainActivity">
 
         <Button
             android:id="@+id/ok"
