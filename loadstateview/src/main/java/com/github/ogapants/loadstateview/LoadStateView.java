@@ -37,14 +37,14 @@ public class LoadStateView extends FrameLayout {
 
     protected void initViews() {
         ProgressBar progress = new ProgressBar(getContext());
-        TextView emptyTextView = new TextView(getContext());
-        emptyTextView.setText("data is empty");
-        Button reloadButton = new Button(getContext());
-        reloadButton.setText("reload");
-        initViews(progress, emptyTextView, reloadButton);
+        TextView emptyView = new TextView(getContext());
+        emptyView.setText("data is empty");
+        Button reloadView = new Button(getContext());
+        reloadView.setText("reload");
+        initViews(progress, emptyView, reloadView);
     }
 
-    protected void initViews(View progressView, View emptyView, View reloadView) {
+    public void initViews(View progressView, View emptyView, View reloadView) {
         setProgressView(progressView);
         setEmptyView(emptyView);
         setReloadView(reloadView);
@@ -138,7 +138,7 @@ public class LoadStateView extends FrameLayout {
         }
     }
 
-    public void with(View dataView) {
+    public void setDataView(View dataView) {
         this.dataView = dataView;
     }
 

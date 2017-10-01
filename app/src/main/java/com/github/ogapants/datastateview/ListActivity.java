@@ -38,7 +38,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         listView = findViewById(R.id.list_view);
         loadStateView = findViewById(R.id.dataStateView);
-        loadStateView.with(listView);
+        loadStateView.setDataView(listView);
         loadStateView.setOnReloadClickListener(new LoadStateView.OnReloadClickListener() {
             @Override
             public void onReloadClick() {
@@ -46,10 +46,33 @@ public class ListActivity extends AppCompatActivity {
             }
         });
         LoadState loadState = (LoadState) getIntent().getSerializableExtra(KEY_TYPE);
-        if (getIntent().getBooleanExtra(KEY_CUSTOM, false)) {
-            setCustomView();
-        }
+        if (getIntent().getBooleanExtra(KEY_CUSTOM, false)) setCustomView();
+
         load(loadState);
+    }
+
+    private void load(LoadState expectStatus) {
+        loadStateView.updateState(LoadState.LOADING);
+        new SampleApi().load(expectStatus, new SampleApi.Callback() {
+            @Override
+            public void onSuccess(List<String> result) {
+                if (result.isEmpty()) {
+                    loadStateView.updateState(LoadState.LOADED_EMPTY);
+                    return;
+                }
+                loadStateView.updateState(LoadState.DISABLE);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        ListActivity.this, android.R.layout.simple_list_item_1, result);
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onError() {
+                Log.e(TAG, "onError: ");
+                loadStateView.updateState(LoadState.ERROR);
+                Toast.makeText(ListActivity.this, "error!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setCustomView() {
@@ -63,28 +86,5 @@ public class ListActivity extends AppCompatActivity {
         TextView textView = new TextView(this);
         textView.setText("loading...");
         loadStateView.setProgressView(textView);
-    }
-
-    private void load(LoadState expectStatus) {
-        loadStateView.updateState(LoadState.LOADING);
-        new SampleApi().load(expectStatus, new SampleApi.Callback() {
-            @Override
-            public void onSuccess(List<String> result) {
-                if (result.isEmpty()) {
-                    loadStateView.updateState(LoadState.LOADED_EMPTY);
-                    return;
-                }
-                loadStateView.updateState(LoadState.DISABLE);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ListActivity.this, android.R.layout.simple_list_item_1, result);
-                listView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onError() {
-                Log.e(TAG, "onError: ");
-                loadStateView.updateState(LoadState.ERROR);
-                Toast.makeText(ListActivity.this, "error!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }
