@@ -28,9 +28,16 @@
             android:text="error" />
 
         <CheckBox
-            android:id="@+id/checkbox"
+            android:id="@+id/customCheck"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="custom" />
+
+        <CheckBox
+            android:id="@+id/otherCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="other sample" />
+
     </LinearLayout>
 </layout>
