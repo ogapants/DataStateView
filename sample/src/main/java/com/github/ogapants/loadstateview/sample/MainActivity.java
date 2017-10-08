@@ -11,6 +11,7 @@ import com.github.ogapants.loadstateview.sample.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private boolean custom;
+    private boolean otherSample;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +37,25 @@ public class MainActivity extends AppCompatActivity {
                 go(LoadState.ERROR);
             }
         });
-        binding.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        binding.customCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 custom = b;
             }
         });
+        binding.otherCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                otherSample = b;
+            }
+        });
     }
 
     private void go(LoadState loadState) {
-        startActivity(ListActivity.createIntent(this, loadState, custom));
+        if (otherSample) {
+            startActivity(DataBindingActivity.createIntent(this, loadState));
+        } else {
+            startActivity(ListActivity.createIntent(this, loadState, custom));
+        }
     }
 }
