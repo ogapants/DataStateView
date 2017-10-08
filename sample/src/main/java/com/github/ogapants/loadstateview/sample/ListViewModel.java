@@ -15,6 +15,7 @@ public class ListViewModel extends BaseObservable {
     private static final String TAG = DataBindingActivity.class.getSimpleName();
 
     private LoadState loadState;
+    private Callback callback;
 
     public ListViewModel() {
     }
@@ -34,6 +35,10 @@ public class ListViewModel extends BaseObservable {
         notifyPropertyChanged(BR.loadState);
     }
 
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
+
     public void load(LoadState expectStatus) {
         setLoadState(LoadState.LOADING);
         new SampleApi().load(expectStatus, new SampleApi.Callback() {
@@ -44,17 +49,21 @@ public class ListViewModel extends BaseObservable {
                     return;
                 }
                 setLoadState(LoadState.DISABLE);
-//                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//                        DataBindingActivity.this, android.R.layout.simple_list_item_1, result);
-//                binding.listView.setAdapter(adapter);
+                callback.onGetList(result);
             }
 
             @Override
             public void onError() {
                 Log.e(TAG, "onError: ");
                 setLoadState(LoadState.ERROR);
-//                Toast.makeText(DataBindingActivity.this, "error!", Toast.LENGTH_SHORT).show();
+                callback.onError("error!");
             }
         });
+    }
+
+    interface Callback {
+        void onGetList(List<String> result);
+
+        void onError(String message);
     }
 }
