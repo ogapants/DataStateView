@@ -6,4 +6,6 @@ A View for managing several states of data on Android
 - Data is Empty
 - and gone when data loaded
 
-todo...
+todo
+- to library
+- add empty reload
